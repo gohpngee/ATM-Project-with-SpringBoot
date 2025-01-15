@@ -1,8 +1,8 @@
-package.com.gohpngee.atm_transaction_app.model;
+package com.gohpngee.atm_transaction_app.model;
 import java.math.BigDecimal;
 
 public class Account {
-    private static int counter = 0;
+    private static Long counter = 0;
     private Long id;
     private final String accountNumber;
     private String accountHolderName;
@@ -19,7 +19,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public void setBalance (BigDecimal balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -27,23 +27,7 @@ public class Account {
         return balance;
     }
 
-    public void deposit (BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) > 0) {
-            balance = balace.add(amount);
-        } else {
-            throw new IllegalArgumentException("Deposit amount must be more than zero.");
-        }
-    }
-
-    public void withdraw (BigDecimal amount) {
-        if ((amount.compareTo(BigDecimal.ZERO) > 0) && (balance.compareTo(amount) >= 0)){
-            balance = balance.subtract(amount);
-        } else {
-            throw new IllegalArgumentAcception("Insufficient Funds.");
-        }
-    }
-
-    public checkBalance() {
+    public void checkBalance() {
         System.out.println("Balance: " + balance);
     }
 }
