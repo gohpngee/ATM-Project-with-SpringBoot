@@ -83,5 +83,4 @@ public class AccountService {
                 .orElseThrow(() -> new AccountNotFoundException("Account number does not exist in the database."));
         return account.getBalance();
     }
-
 }
