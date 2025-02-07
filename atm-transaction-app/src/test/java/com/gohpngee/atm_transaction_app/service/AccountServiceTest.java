@@ -96,6 +96,7 @@ public class AccountServiceTest {
         verify(accountRepository, times(2));
     }
 
+    @Test
     void testCreateAccount() {
         String mockAccountNumber = "094511";
         String mockAccHolderName = "Ying Yeng";
