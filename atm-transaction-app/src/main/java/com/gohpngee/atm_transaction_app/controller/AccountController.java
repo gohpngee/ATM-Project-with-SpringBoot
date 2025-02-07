@@ -17,6 +17,11 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @GetMapping("/home")
+    public String home() {
+        return "Welcome to the home page";
+    }
+
     @GetMapping("/{accountNumber}/balance")
     public BigDecimal showBalance(@PathVariable String accountNumber) {
         return accountService.showBalance(accountNumber);
