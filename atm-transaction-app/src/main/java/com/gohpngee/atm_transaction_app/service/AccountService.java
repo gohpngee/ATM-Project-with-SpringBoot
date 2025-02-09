@@ -21,7 +21,6 @@ public class AccountService {
     public AccountService(AccountRepository accountRepository){
         this.accountRepository = accountRepository;
     }
-    private Account newAccount;
 
     @Transactional
     public void createAccount(String accountNumber, String accountHolderName, String accountType, BigDecimal balance) {
