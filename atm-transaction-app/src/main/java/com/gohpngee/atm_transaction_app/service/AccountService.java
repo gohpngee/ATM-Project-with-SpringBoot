@@ -24,7 +24,6 @@ public class AccountService {
 
     @Transactional
     public void createAccount(String accountNumber, String accountHolderName, String accountType, BigDecimal balance) {
-        //Account account = new Account(accountNumber, accountHolderName, accountType, balance);
         Account account = Account.builder()
                         .accountNumber(accountNumber)
                         .accountHolderName(accountHolderName)
