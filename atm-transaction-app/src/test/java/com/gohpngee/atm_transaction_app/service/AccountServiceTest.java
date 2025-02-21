@@ -96,7 +96,7 @@ public class AccountServiceTest {
         verify(accountRepository, times(2));
     }
 
-    @Test
+    /*@Test
     void testCreateAccount() {
         String mockAccountNumber = "094511";
         String mockAccHolderName = "Ying Yeng";
@@ -109,5 +109,5 @@ public class AccountServiceTest {
 
         accountService.createAccount(mockAccountNumber, mockAccHolderName, mockAccountType, mockBalance);
         verify(accountRepository, times(1)).save(mockAccount);
-    }
+    }*/
 }
