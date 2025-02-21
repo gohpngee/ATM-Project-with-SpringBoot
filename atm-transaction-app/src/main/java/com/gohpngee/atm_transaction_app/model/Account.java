@@ -4,10 +4,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 public class Account {
     @Id
@@ -16,8 +16,10 @@ public class Account {
 
     @Column(unique = true, nullable = false)
     private String accountNumber;
-
     private String accountHolderName;
     private String accountType;
     private BigDecimal balance;
+
+    public Account(String accountNumber, String accountHolderName, String accountType, BigDecimal balance) {
+    }
 }
