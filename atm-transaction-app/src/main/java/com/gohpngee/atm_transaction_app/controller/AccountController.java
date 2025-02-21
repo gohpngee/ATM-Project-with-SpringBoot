@@ -1,10 +1,10 @@
 package com.gohpngee.atm_transaction_app.controller;
 
-import com.gohpngee.atm_transaction_app.service.AccountRequestDTO;
-import com.gohpngee.atm_transaction_app.service.AccountResponseDTO;
+import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
 import com.gohpngee.atm_transaction_app.service.AccountService;
 import com.gohpngee.atm_transaction_app.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @RequestMapping("/accounts")
 public class AccountController {
     private final AccountService accountService;
-    private final Account account;
 
     @Autowired
     public AccountController(AccountService accountService) {
@@ -31,9 +30,9 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public String createAccount(@RequestBody AccountRequestDTO accountRequestDTO) {
-        Account newAccount = accountService.createAccount(accountRequestDTO);
-
+    public ResponseEntity<String> createAccount(@RequestBody CreateAccountDTO dto) {
+        accountService.createAccount(dto);
+        return ResponseEntity.ok("Account Created Successfully!");
     }
 
     @PutMapping("/{accountNumber}/deposit")
