@@ -1,15 +1,15 @@
-package com.gohpngee.atm_transaction_app.service;
+package com.gohpngee.atm_transaction_app.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
-@Setter
 @RequiredArgsConstructor
-public class AccountResponseDTO {
+public class AccountRequestDTO {
     private final String accountNumber;
+    private final String accountHolderName;
+    private final String accountType;
     private final BigDecimal balance;
 }
