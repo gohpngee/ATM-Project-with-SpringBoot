@@ -1,15 +1,19 @@
 package com.gohpngee.atm_transaction_app.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
-@RequiredArgsConstructor
-public class AccountRequestDTO {
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor (force = true)
+public class CreateAccountDTO {
     private final String accountNumber;
     private final String accountHolderName;
     private final String accountType;
-    private final BigDecimal balance;
+    private BigDecimal balance;
 }
