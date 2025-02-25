@@ -3,21 +3,21 @@ package com.gohpngee.atm_transaction_app.controller;
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
 import com.gohpngee.atm_transaction_app.service.AccountService;
 import com.gohpngee.atm_transaction_app.model.Account;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api/accounts")
 public class AccountController {
     private final AccountService accountService;
 
-    @Autowired
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+
+    Account account2 = new Account();
 
     @GetMapping("/home")
     public String home() {

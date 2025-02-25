@@ -2,6 +2,7 @@ package com.gohpngee.atm_transaction_app.service;
 
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
 import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 
@@ -12,15 +13,15 @@ import com.gohpngee.atm_transaction_app.model.Account;
 import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 
 import com.gohpngee.atm_transaction_app.exception.AccountNotFoundException;
-import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
 
-    @Autowired
-    public AccountService(AccountRepository accountRepository){
+    Account account = new Account();
+    account
+
+    public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
