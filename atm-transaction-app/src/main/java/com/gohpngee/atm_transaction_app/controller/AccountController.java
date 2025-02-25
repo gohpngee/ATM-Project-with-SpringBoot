@@ -1,6 +1,7 @@
 package com.gohpngee.atm_transaction_app.controller;
 
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
+import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 import com.gohpngee.atm_transaction_app.service.AccountService;
 import com.gohpngee.atm_transaction_app.model.Account;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,6 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
-
-    Account account2 = new Account();
 
     @GetMapping("/home")
     public String home() {

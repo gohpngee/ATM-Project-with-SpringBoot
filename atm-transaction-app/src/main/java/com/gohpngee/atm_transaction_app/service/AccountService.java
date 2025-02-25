@@ -3,13 +3,13 @@ package com.gohpngee.atm_transaction_app.service;
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
 import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 
+import com.gohpngee.atm_transaction_app.model.Account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gohpngee.atm_transaction_app.model.Account;
+
 import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 
 import com.gohpngee.atm_transaction_app.exception.AccountNotFoundException;
@@ -17,9 +17,6 @@ import com.gohpngee.atm_transaction_app.exception.AccountNotFoundException;
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
-
-    Account account = new Account();
-    account
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
