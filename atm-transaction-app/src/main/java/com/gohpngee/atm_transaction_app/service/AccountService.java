@@ -6,6 +6,7 @@ import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
 import java.math.BigDecimal;
 
 import com.gohpngee.atm_transaction_app.model.Account;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +15,10 @@ import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 
 import com.gohpngee.atm_transaction_app.exception.AccountNotFoundException;
 
+@RequiredArgsConstructor
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
-
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
 
     @Transactional
     public void createAccount(CreateAccountDTO dto) {
