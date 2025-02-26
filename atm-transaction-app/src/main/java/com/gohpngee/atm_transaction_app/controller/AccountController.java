@@ -1,9 +1,7 @@
 package com.gohpngee.atm_transaction_app.controller;
 
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
-import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 import com.gohpngee.atm_transaction_app.service.AccountService;
-import com.gohpngee.atm_transaction_app.model.Account;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
