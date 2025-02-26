@@ -7,32 +7,10 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Getter
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class ShowBalanceDTO {
     private String accountNumber;
+    private String accountType;
     private BigDecimal balance;
-
-    /*public ShowBalanceDTO(String accountNumber, BigDecimal balance) {
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-    }
-
-    public ShowBalanceDTO() {}
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }*/
 }
