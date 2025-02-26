@@ -1,9 +1,13 @@
 package com.gohpngee.atm_transaction_app.service;
 
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
+import com.gohpngee.atm_transaction_app.dto.DepositWithdrawDTO;
+import com.gohpngee.atm_transaction_app.dto.ShowBalanceDTO;
+import com.gohpngee.atm_transaction_app.dto.TransferDTO;
 import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import com.gohpngee.atm_transaction_app.model.Account;
 import lombok.RequiredArgsConstructor;
@@ -22,65 +26,87 @@ public class AccountService {
 
     @Transactional
     public void createAccount(CreateAccountDTO dto) {
-        Account account = new Account(dto.getAccountNumber(),
-                dto.getAccountHolderName(),
-                dto.getAccountType(),
-                dto.getBalance());
+        Account account = Account.builder()
+                .accountNumber(dto.getAccountNumber())
+                .accountHolderName(dto.getAccountHolderName())
+                .accountType(dto.getAccountType())
+                .balance(dto.getBalance())
+                .build();
         accountRepository.save(account);
     }
 
     @Transactional
-    public void deposit(String accountNumber, BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be more than zero.");
+    public void deposit(DepositWithdrawDTO dto) {
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(dto.getAccountNumber()); //avoiding NullPointerException
+
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException("Account not found");
         }
-        Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(() -> new AccountNotFoundException("Account not found."));
 
-        account.setBalance(account.getBalance().add(amount));
+        Account account = optionalAccount.get(); //extracts the Account object from the Optional<Account> wrapper
+
+        BigDecimal updatedBalance = account.getBalance().add(dto.getAmount());
+        account.setBalance(updatedBalance);
+
         accountRepository.save(account);
     }
 
     @Transactional
-    public void withdraw(String accountNumber, BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0){
+    public void withdraw(DepositWithdrawDTO dto) {
+        if (dto.getAmount().compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("Amount withdrawn must be more than zero.");
         }
 
-        Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(() -> new AccountNotFoundException("Account not found."));
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(dto.getAccountNumber());
 
-        if (account.getBalance().compareTo(amount) < 0){
-            throw new InsufficientFundsException("Insufficient Funds.");
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException("Account not found");
         }
 
-        account.setBalance(account.getBalance().subtract(amount));
+        Account account = optionalAccount.get();
+
+        if (account.getBalance().compareTo(dto.getAmount()) < 0)
+            throw new InsufficientFundsException("Insufficient Funds for withdrawal");
+
+        account.setBalance(account.getBalance().subtract(dto.getAmount()));
         accountRepository.save(account);
     }
 
     @Transactional
-    public void transfer(String senderAccountNumber, String receiverAccountNumber, BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+    public void transfer(TransferDTO dto) {
+        if (dto.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Transfer amount must be more than zero.");
         }
 
-        Account sender = accountRepository.findByAccountNumber(senderAccountNumber)
-                .orElseThrow(() -> new AccountNotFoundException("Sender account does not exist."));
-        Account receiver = accountRepository.findByAccountNumber(receiverAccountNumber)
-                .orElseThrow(() -> new AccountNotFoundException("Receiver account does not exist."));
+        Optional<Account> optionalSender = accountRepository.findByAccountNumber(dto.getSenderAccountNumber());
+        if (optionalSender.isEmpty()){
+            throw new AccountNotFoundException("Sender account not found.");
+        }
+        Account sender = optionalSender.get();
 
-        if (sender.getBalance().compareTo(amount) < 0) {
+        Optional<Account> optionalReceiver = accountRepository.findByAccountNumber(dto.getReceiverAccountNumber());
+        if (optionalReceiver.isEmpty()){
+            throw new AccountNotFoundException("Recepient account not found.");
+        }
+        Account receiver = optionalReceiver.get();
+
+        if (sender.getBalance().compareTo(dto.getAmount()) < 0) {
             throw new InsufficientFundsException("Insufficient funds for transaction.");
         }
 
-        sender.setBalance(sender.getBalance().subtract(amount));
-        receiver.setBalance(receiver.getBalance().add(amount));
+        sender.setBalance(sender.getBalance().subtract(dto.getAmount()));
+        receiver.setBalance(receiver.getBalance().add(dto.getAmount()));
 
         accountRepository.save(sender);
         accountRepository.save(receiver);
-    }
+        }
 
-    public BigDecimal showBalance(String accountNumber) {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountNotFoundException("Account number does not exist in the database."));
-        return account.getBalance();
+    public Account showBalance(ShowBalanceDTO dto) {
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(dto.getAccountNumber());
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException("Account not found.");
+        }
+        Account account = optionalAccount.get();
+        return account;
     }
 }
