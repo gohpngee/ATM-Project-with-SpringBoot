@@ -1,12 +1,19 @@
 package com.gohpngee.atm_transaction_app.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
+@Getter
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class ShowBalanceDTO {
     private String accountNumber;
     private BigDecimal balance;
 
-    public ShowBalanceDTO(String accountNumber, BigDecimal balance) {
+    /*public ShowBalanceDTO(String accountNumber, BigDecimal balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
@@ -27,5 +34,5 @@ public class ShowBalanceDTO {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
-    }
+    }*/
 }
