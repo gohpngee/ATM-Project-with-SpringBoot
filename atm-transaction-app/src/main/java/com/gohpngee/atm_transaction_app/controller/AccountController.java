@@ -1,6 +1,10 @@
 package com.gohpngee.atm_transaction_app.controller;
 
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
+import com.gohpngee.atm_transaction_app.dto.DepositWithdrawDTO;
+import com.gohpngee.atm_transaction_app.dto.ShowBalanceDTO;
+import com.gohpngee.atm_transaction_app.dto.TransferDTO;
+import com.gohpngee.atm_transaction_app.model.Account;
 import com.gohpngee.atm_transaction_app.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,32 +25,33 @@ public class AccountController {
         return "Welcome to the home page";
     }
 
-    @GetMapping("/{accountNumber}/balance")
-    public BigDecimal showBalance(@PathVariable String accountNumber) {
-        return accountService.showBalance(accountNumber);
-    }
-
     @PostMapping("/create")
     public ResponseEntity<String> createAccount(@RequestBody CreateAccountDTO dto) {
         accountService.createAccount(dto);
         return ResponseEntity.ok("Account Created Successfully!");
     }
 
-    @PutMapping("/{accountNumber}/deposit")
-    public String deposit(@PathVariable String accountNumber, @RequestParam BigDecimal amount) {
-        accountService.deposit(accountNumber, amount);
-        return "Deposit of " + amount + " successful for account " + accountNumber;
+    @PutMapping("/deposit")
+    public ResponseEntity<String> deposit(@RequestBody DepositWithdrawDTO dto) {
+        accountService.deposit(dto);
+        return ResponseEntity.ok("Deposit of " + dto.getAmount() + " successful for account " + dto.getAccountNumber());
     }
 
-    @PutMapping("/{accountNumber}/withdraw")
-    public String withdraw(@PathVariable String accountNumber, @RequestParam BigDecimal amount) {
-        accountService.withdraw(accountNumber, amount);
-        return "Withdraw of " + amount + " successful for account " + accountNumber;
+    @PutMapping("/withdraw")
+    public ResponseEntity<String> withdraw(@RequestBody DepositWithdrawDTO dto) {
+        accountService.withdraw(dto);
+        return ResponseEntity.ok( "Withdraw of" + dto.getAmount() + " successful for account " + dto.getAccountNumber());
     }
 
     @PutMapping("/transfer")
-    public String transfer(@RequestParam String senderAccountNumber, @RequestParam String receiverAccountNumber, @RequestParam BigDecimal amount) {
-        accountService.transfer(senderAccountNumber, receiverAccountNumber, amount);
-        return "Transfer of " + amount + " successful from account " + senderAccountNumber + " to account " + receiverAccountNumber;
+    public ResponseEntity<String> transfer(@RequestBody TransferDTO dto) {
+        accountService.transfer(dto);
+        return ResponseEntity.ok("Transfer of $" + dto.getAmount() + " successful from account " + dto.getSenderAccountNumber() + " to account " + dto.getReceiverAccountNumber());
+    }
+
+    @GetMapping("/Balance")
+    public ResponseEntity<String> showBalance(@RequestBody ShowBalanceDTO dto) {
+        Account account = accountService.showBalance(dto);
+        return ResponseEntity.ok("Your balance for account number: " + account.getAccountNumber() + ", for the " + account.getAccountType() + " is: " + account.getBalance());
     }
 }
