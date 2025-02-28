@@ -1,9 +1,9 @@
 package com.gohpngee.atm_transaction_app.dto;
 
+import com.gohpngee.atm_transaction_app.model.Account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -12,6 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class DepositWithdrawDTO {
     private String accountNumber;
-    private String accountType;
+    private Account.AccountType accountType;
     private  BigDecimal amount;
 }

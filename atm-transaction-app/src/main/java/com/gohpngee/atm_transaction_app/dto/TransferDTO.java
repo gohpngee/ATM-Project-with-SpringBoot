@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class TransferDTO {
     private String senderAccountNumber;
     private String receiverAccountNumber;
-    private String senderAccountType;
-    private String receiverAccountType;
+    private AccountType senderAccountType;
+    private AccountType receiverAccountType;
     private BigDecimal amount;
 }
