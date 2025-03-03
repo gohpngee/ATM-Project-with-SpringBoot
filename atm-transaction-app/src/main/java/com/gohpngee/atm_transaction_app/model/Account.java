@@ -2,7 +2,6 @@ package com.gohpngee.atm_transaction_app.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 import java.math.BigDecimal;
 
 @Getter
@@ -12,12 +11,20 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 public class Account {
+    public enum AccountType {
+        SAVINGS,
+        CHECKING
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @Column(unique = true, nullable = false)
     private String accountNumber;
     @Column(nullable = false)
     private String accountHolderName;
     @Column(nullable = false)
-    private String accountType;
+    private AccountType accountType;
     @Column(nullable = false)
     private BigDecimal balance;
 }
