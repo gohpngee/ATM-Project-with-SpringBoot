@@ -29,7 +29,7 @@ public class AccountService {
         Account account = Account.builder()
                 .accountNumber(dto.getAccountNumber())
                 .accountHolderName(dto.getAccountHolderName())
-                .accountType(dto.getAccountType())
+                .accountType(Account.AccountType.valueOf(dto.getAccountType()))
                 .balance(dto.getBalance())
                 .build();
         accountRepository.save(account);
