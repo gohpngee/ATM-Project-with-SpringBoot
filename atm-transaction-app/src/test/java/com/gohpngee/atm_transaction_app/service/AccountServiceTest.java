@@ -1,6 +1,8 @@
 package com.gohpngee.atm_transaction_app.service;
 
 import com.gohpngee.atm_transaction_app.dto.DepositWithdrawDTO;
+import com.gohpngee.atm_transaction_app.dto.ShowBalanceDTO;
+import com.gohpngee.atm_transaction_app.dto.TransferDTO;
 import com.gohpngee.atm_transaction_app.model.Account;
 import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 
@@ -10,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -78,39 +79,57 @@ public class AccountServiceTest {
     void testShowBalance() {
         String mockAccountNumber = "19990826";
         Account mockAccount = Account.builder()
-                                .accountNumber(mockAccountNumber)
-                                .accountHolderName("Brian Goh")
-                                .accountType(Account.AccountType.SAVINGS)
-                                .balance(BigDecimal.valueOf(7026))
-                                .build();
+                              .accountNumber(mockAccountNumber)
+                              .accountHolderName("Brian Goh")
+                              .accountType(Account.AccountType.SAVINGS)
+                              .balance(BigDecimal.valueOf(7026))
+                              .build();
 
         when(accountRepository.findByAccountNumber(mockAccountNumber)).thenReturn(Optional.of(mockAccount));
 
-        assertEquals(BigDecimal.valueOf(7026), mockAccount.getBalance());
         ShowBalanceDTO dto = new ShowBalanceDTO(mockAccountNumber, Account.AccountType.SAVINGS, null);
-        accountService.showBalance(dto);
+        Account account = accountService.showBalance(dto);
+        assertEquals(BigDecimal.valueOf(7026), account.getBalance());
 
         verify(accountRepository, times(1)).findByAccountNumber(mockAccountNumber);
     }
 
     @Test
     void testTransfer() {
-        String mockSenderAccNum = "123456";
+        String mockSenderAccNum = "345678";
         String mockReceiverAccNum = "654321";
-        BigDecimal mockTransfAmount = BigDecimal.valueOf(5090);
+        BigDecimal mockTransfAmount = BigDecimal.valueOf(5990);
 
-        Account mockSenderAcc = new Account(mockSenderAccNum, "Brian Goh", "Savings", BigDecimal.valueOf(6000));
-        Account mockReceiverAcc = new Account(mockReceiverAccNum, "Tammy Chan", "Savings", BigDecimal.valueOf(10));
+        Account mockSenderAcc = Account.builder()
+                                .accountNumber(mockSenderAccNum)
+                                .accountHolderName("Brian Goh")
+                                .accountType(Account.AccountType.SAVINGS)
+                                .balance(BigDecimal.valueOf(6000))
+                                .build();
+        Account mockReceiverAcc = Account.builder()
+                                  .accountNumber(mockReceiverAccNum)
+                                  .accountHolderName("Tammy Chan")
+                                  .accountType(Account.AccountType.SAVINGS)
+                                  .balance(BigDecimal.valueOf(10))
+                                  .build();
 
         when(accountRepository.findByAccountNumber(mockSenderAccNum)).thenReturn(Optional.of(mockSenderAcc));
         when(accountRepository.findByAccountNumber(mockReceiverAccNum)).thenReturn(Optional.of(mockReceiverAcc));
 
-        accountService.transfer(mockSenderAccNum, mockReceiverAccNum, mockTransfAmount);
+        TransferDTO dto = new TransferDTO(
+                            mockSenderAccNum,
+                            mockReceiverAccNum,
+                            Account.AccountType.SAVINGS,
+                            Account.AccountType.SAVINGS,
+                            mockTransfAmount);
+
+        accountService.transfer(dto);
 
         assertEquals(BigDecimal.valueOf(10), mockSenderAcc.getBalance());
         assertEquals(BigDecimal.valueOf(6000), mockReceiverAcc.getBalance());
 
-        verify(accountRepository, times(2));
+        verify(accountRepository, times(1)).save(mockSenderAcc);
+        verify(accountRepository, times(1)).save(mockReceiverAcc);
     }
 
     /*@Test
