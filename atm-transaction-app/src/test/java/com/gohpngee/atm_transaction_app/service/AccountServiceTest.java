@@ -1,5 +1,6 @@
 package com.gohpngee.atm_transaction_app.service;
 
+import com.gohpngee.atm_transaction_app.dto.DepositWithdrawDTO;
 import com.gohpngee.atm_transaction_app.model.Account;
 import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 
@@ -32,17 +33,21 @@ public class AccountServiceTest {
     @Test
     void testDeposit() {
         String mockAccountNumber = "123456";
-        BigDecimal mockDepositAmount = BigDecimal.valueOf(2025);
+        BigDecimal mockDepositAmount = BigDecimal.valueOf(1926);
 
-        //Mock an existing account
-        Account mockAccount = new Account(mockAccountNumber, "Brian Goh", "Savings", BigDecimal.valueOf(100));
+        Account mockAccount = Account.builder()
+                                .accountNumber(mockAccountNumber)
+                                .accountHolderName("Brian Goh")
+                                .accountType(Account.AccountType.SAVINGS)
+                                .balance(BigDecimal.valueOf(100))
+                                .build();
+
         when(accountRepository.findByAccountNumber(mockAccountNumber)).thenReturn(Optional.of(mockAccount));
 
-        //call the deposit method
-        accountService.deposit(mockAccountNumber, mockDepositAmount);
+        DepositWithdrawDTO dto = new DepositWithdrawDTO(mockAccountNumber, Account.AccountType.SAVINGS, mockDepositAmount);
+        accountService.deposit(dto);
 
-        //Verify the balance if its updated
-        assertEquals(BigDecimal.valueOf(2125), mockAccount.getBalance());
+        assertEquals(BigDecimal.valueOf(2026), mockAccount.getBalance());
         verify(accountRepository, times(1)).save(mockAccount);
     }
 
@@ -52,26 +57,38 @@ public class AccountServiceTest {
         BigDecimal mockWithdrawAmount = BigDecimal.valueOf(5000);
 
         //Mock an account
-        Account mockAccount = new Account(mockAccountNumber, "Tammy Chan", "Savings", BigDecimal.valueOf(7025));
+        Account mockAccount = Account.builder()
+                                .accountNumber(mockAccountNumber)
+                                .accountHolderName("Tammy Chan")
+                                .accountType(Account.AccountType.SAVINGS)
+                                .balance(BigDecimal.valueOf(7026))
+                                .build();
+
         when(accountRepository.findByAccountNumber(mockAccountNumber)).thenReturn(Optional.of(mockAccount));
 
-        accountService.withdraw(mockAccountNumber, mockWithdrawAmount);
+        DepositWithdrawDTO dto = new DepositWithdrawDTO(mockAccountNumber, Account.AccountType.SAVINGS, mockWithdrawAmount);
+        accountService.withdraw(dto);
 
         //checking that the balance is updated correctly
-        assertEquals(BigDecimal.valueOf(2025), mockAccount.getBalance());
-
+        assertEquals(BigDecimal.valueOf(2026), mockAccount.getBalance());
         verify(accountRepository, times(1)).save(mockAccount);
     }
 
     @Test
     void testShowBalance() {
         String mockAccountNumber = "19990826";
-        Account mockAccount = new Account(mockAccountNumber, "Png Ee", "Savings", BigDecimal.valueOf(1999));
+        Account mockAccount = Account.builder()
+                                .accountNumber(mockAccountNumber)
+                                .accountHolderName("Brian Goh")
+                                .accountType(Account.AccountType.SAVINGS)
+                                .balance(BigDecimal.valueOf(7026))
+                                .build();
+
         when(accountRepository.findByAccountNumber(mockAccountNumber)).thenReturn(Optional.of(mockAccount));
 
-        BigDecimal mockBalance = accountService.showBalance(mockAccountNumber);
-
-        assertEquals(BigDecimal.valueOf(1999), mockBalance);
+        assertEquals(BigDecimal.valueOf(7026), mockAccount.getBalance());
+        ShowBalanceDTO dto = new ShowBalanceDTO(mockAccountNumber, Account.AccountType.SAVINGS, null);
+        accountService.showBalance(dto);
 
         verify(accountRepository, times(1)).findByAccountNumber(mockAccountNumber);
     }
