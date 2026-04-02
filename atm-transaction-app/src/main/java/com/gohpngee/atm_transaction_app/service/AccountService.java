@@ -37,16 +37,17 @@ public class AccountService {
 
     @Transactional
     public void deposit(DepositWithdrawDTO dto) {
-        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(dto.getAccountNumber()); //avoiding NullPointerException
+        if (dto.getAmount() == null || dto.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+            throw new IllegalArgumentException("Amount deposited must be more than zero.");
+        }
 
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(dto.getAccountNumber()); //avoiding NullPointerException
         if (optionalAccount.isEmpty()) {
             throw new AccountNotFoundException("Account not found");
         }
 
         Account account = optionalAccount.get(); //extracts the Account object from the Optional<Account> wrapper
-
-        BigDecimal updatedBalance = account.getBalance().add(dto.getAmount());
-        account.setBalance(updatedBalance);
+        account.setBalance(account.getBalance().add(dto.getAmount()));
 
         accountRepository.save(account);
     }
