@@ -21,10 +21,13 @@ public class Account {
 
     @Column(unique = true, nullable = false)
     private String accountNumber;
+
     @Column(nullable = false)
     private String accountHolderName;
+
     @Column(nullable = false)
     private AccountType accountType;
+
     @Column(nullable = false)
     private BigDecimal balance;
 }
