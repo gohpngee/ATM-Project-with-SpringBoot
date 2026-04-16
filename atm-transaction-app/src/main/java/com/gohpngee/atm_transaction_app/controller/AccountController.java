@@ -34,19 +34,19 @@ public class AccountController {
     @PutMapping("/deposit")
     public ResponseEntity<String> deposit(@RequestBody DepositWithdrawDTO dto) {
         accountService.deposit(dto);
-        return ResponseEntity.ok("Deposit of " + dto.getAmount() + " successful for account " + dto.getAccountNumber());
+        return ResponseEntity.ok("Deposit of " + dto.getAmount() + " is successful for account " + dto.getAccountNumber());
     }
 
     @PutMapping("/withdraw")
     public ResponseEntity<String> withdraw(@RequestBody DepositWithdrawDTO dto) {
         accountService.withdraw(dto);
-        return ResponseEntity.ok( "Withdraw of" + dto.getAmount() + " successful for account " + dto.getAccountNumber());
+        return ResponseEntity.ok( "Withdraw of " + dto.getAmount() + " is successful for account " + dto.getAccountNumber());
     }
 
     @PutMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody TransferDTO dto) {
         accountService.transfer(dto);
-        return ResponseEntity.ok("Transfer of $" + dto.getAmount() + " successful from account " + dto.getSenderAccountNumber() + " to account " + dto.getReceiverAccountNumber());
+        return ResponseEntity.ok("Transfer of $" + dto.getAmount() + " is successful from account " + dto.getSenderAccountNumber() + " to account " + dto.getReceiverAccountNumber());
     }
 
     @GetMapping("/balance/{accountNumber}")
@@ -56,6 +56,6 @@ public class AccountController {
         Account account = accountService.showBalance(dto);
         return ResponseEntity.ok("Your balance for account number: " + account.getAccountNumber()
         + ", for the " + account.getAccountType()
-        + " is: " + account.getBalance());
+        + " account is: " + account.getBalance());
     }
 }
