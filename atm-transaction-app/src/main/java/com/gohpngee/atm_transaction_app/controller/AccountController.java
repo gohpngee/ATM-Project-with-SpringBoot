@@ -28,7 +28,7 @@ public class AccountController {
     @PostMapping("/create")
     public ResponseEntity<String> createAccount(@RequestBody CreateAccountDTO dto) {
         accountService.createAccount(dto);
-        return ResponseEntity.ok("Account Created Successfully!");
+        return ResponseEntity.ok("Account " + dto.getAccountHolderName() + " Created Successfully!");
     }
 
     @PutMapping("/deposit")
@@ -49,9 +49,13 @@ public class AccountController {
         return ResponseEntity.ok("Transfer of $" + dto.getAmount() + " successful from account " + dto.getSenderAccountNumber() + " to account " + dto.getReceiverAccountNumber());
     }
 
-    @GetMapping("/Balance")
-    public ResponseEntity<String> showBalance(@RequestBody ShowBalanceDTO dto) {
+    @GetMapping("/balance/{accountNumber}")
+    public ResponseEntity<String> showBalance(@PathVariable String accountNumber) {
+        ShowBalanceDTO dto = new ShowBalanceDTO(accountNumber, null, null);
+
         Account account = accountService.showBalance(dto);
-        return ResponseEntity.ok("Your balance for account number: " + account.getAccountNumber() + ", for the " + account.getAccountType() + " is: " + account.getBalance());
+        return ResponseEntity.ok("Your balance for account number: " + account.getAccountNumber()
+        + ", for the " + account.getAccountType()
+        + " is: " + account.getBalance());
     }
 }
