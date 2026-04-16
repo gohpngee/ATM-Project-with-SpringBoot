@@ -4,6 +4,7 @@ import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
 import com.gohpngee.atm_transaction_app.dto.DepositWithdrawDTO;
 import com.gohpngee.atm_transaction_app.dto.ShowBalanceDTO;
 import com.gohpngee.atm_transaction_app.dto.TransferDTO;
+import com.gohpngee.atm_transaction_app.exception.DuplicateAccountException;
 import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
 
 import java.math.BigDecimal;
@@ -26,10 +27,14 @@ public class AccountService {
 
     @Transactional
     public void createAccount(CreateAccountDTO dto) {
+        if (accountRepository.findByAccountNumber(dto.getAccountNumber()).isPresent()) {
+            throw new DuplicateAccountException("Account number already exists: " + dto.getAccountNumber());
+        }
+
         Account account = Account.builder()
                 .accountNumber(dto.getAccountNumber())
                 .accountHolderName(dto.getAccountHolderName())
-                .accountType(Account.AccountType.valueOf(dto.getAccountType()))
+                .accountType(Account.AccountType.valueOf(dto.getAccountType().toUpperCase()))
                 .balance(dto.getBalance())
                 .build();
         accountRepository.save(account);
