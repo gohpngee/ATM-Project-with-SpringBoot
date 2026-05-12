@@ -1,24 +1,23 @@
 package com.gohpngee.atm_transaction_app.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.gohpngee.atm_transaction_app.dto.CreateAccountDTO;
 import com.gohpngee.atm_transaction_app.dto.DepositWithdrawDTO;
 import com.gohpngee.atm_transaction_app.dto.ShowBalanceDTO;
 import com.gohpngee.atm_transaction_app.dto.TransferDTO;
+import com.gohpngee.atm_transaction_app.exception.AccountNotFoundException;
 import com.gohpngee.atm_transaction_app.exception.DuplicateAccountException;
 import com.gohpngee.atm_transaction_app.exception.InsufficientFundsException;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-
 import com.gohpngee.atm_transaction_app.model.Account;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-
 import com.gohpngee.atm_transaction_app.repository.AccountRepository;
 
-import com.gohpngee.atm_transaction_app.exception.AccountNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -114,5 +113,10 @@ public class AccountService {
         }
         Account account = optionalAccount.get();
         return account;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 }
