@@ -1,14 +1,21 @@
 package com.gohpngee.atm_transaction_app.exception;
 
+import java.time.Instant;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Instant;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        String errorMessage = "You do not have the required permissions to access this endpoint.";
+        return buildErrorResponse(HttpStatus.FORBIDDEN, errorMessage);
+    }
 
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {

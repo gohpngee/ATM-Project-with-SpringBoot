@@ -1,5 +1,7 @@
 package com.gohpngee.atm_transaction_app.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,7 @@ import com.gohpngee.atm_transaction_app.model.Account;
 import com.gohpngee.atm_transaction_app.service.AccountService;
 
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api/atm")
 public class AccountController {
     private final AccountService accountService;
 
@@ -26,9 +28,10 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "Welcome to the home page";
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/accounts")
+    public ResponseEntity<List<Account>> getAllAccounts() {
+        return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -38,21 +41,21 @@ public class AccountController {
         return ResponseEntity.ok("Account " + dto.getAccountHolderName() + " Created Successfully!");
     }
 
-    @PreAuthorize("hasRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/deposit")
     public ResponseEntity<String> deposit(@RequestBody DepositWithdrawDTO dto) {
         accountService.deposit(dto);
         return ResponseEntity.ok("Deposit of " + dto.getAmount() + " is successful for account " + dto.getAccountNumber());
     }
 
-    @PreAuthorize("hasRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/withdraw")
     public ResponseEntity<String> withdraw(@RequestBody DepositWithdrawDTO dto) {
         accountService.withdraw(dto);
         return ResponseEntity.ok( "Withdraw of " + dto.getAmount() + " is successful for account " + dto.getAccountNumber());
     }
 
-    @PreAuthorize("hasRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody TransferDTO dto) {
         accountService.transfer(dto);
