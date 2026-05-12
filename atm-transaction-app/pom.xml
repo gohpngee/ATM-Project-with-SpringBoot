@@ -29,7 +29,6 @@
 	<properties>
 		<java.version>21</java.version>
 		<lombok.version>1.18.38</lombok.version>
-		<spring-boot.version>4.0.5</spring-boot.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -79,18 +78,24 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-			<version>${spring-boot.version}</version>
 		</dependency>
+		<!-- Only needed if this app acts as the OAuth2 authorization server.
+		     For Keycloak-issued JWTs, spring-boot-starter-oauth2-resource-server is enough. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-authorization-server</artifactId>
-			<version>${spring-boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
-	</dependencies>
+	
+   <dependency>
+     <groupId>org.springframework</groupId>
+     <artifactId>spring-core</artifactId>
+     <version>5.1.9.RELEASE</version>
+   </dependency>
+ </dependencies>
 
 	<build>
 		<plugins>

@@ -12,8 +12,9 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
+    # Host 3306 is often taken by a local MySQL install; use 3307 on the host instead.
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -27,8 +28,8 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: "true"
     healthcheck:
-    test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9000 && echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && grep -q '200' <&3"] 
-    #curl and wget not available in the keycloak image, hence  resulting to send GET request to endpoint, if 200 then healthy
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9000 && echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && grep -q '200' <&3"]
+      # curl/wget not in image; raw TCP GET to health port; 200 => healthy
       interval: 10s
       timeout: 5s
       retries: 10
