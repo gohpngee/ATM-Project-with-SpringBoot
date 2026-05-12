@@ -69,6 +69,7 @@ public class AccountController {
 
         Account account = accountService.showBalance(dto);
         return ResponseEntity.ok("Your balance for account number: " + account.getAccountNumber()
+        + ", " + account.getAccountHolderName()
         + ", for the " + account.getAccountType()
         + " account is: " + account.getBalance());
     }
